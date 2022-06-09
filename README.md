@@ -3,6 +3,9 @@
 2. 支持HTML格式打印
 3. 支持本地和远程HTTP文件
 
+NPM安装：
+npm i netsesame2/cordova-plugin-printer
+
 <p align="left">
     <b><a href="https://github.com/katzer/cordova-plugin-printer/blob/example/README.md">SAMPLE APP</a> :point_right:</b>
 </p>
