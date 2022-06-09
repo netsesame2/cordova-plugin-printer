@@ -1,3 +1,7 @@
+原插件已3年不再更新。对原插件进行以下改进：
+1. 迁移到支持androidX
+2. 支持HTML格式打印
+3. 支持本地和远程HTTP文件
 
 <p align="left">
     <b><a href="https://github.com/katzer/cordova-plugin-printer/blob/example/README.md">SAMPLE APP</a> :point_right:</b>
