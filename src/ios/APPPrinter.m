@@ -89,7 +89,11 @@
         NSMutableDictionary* settings = command.arguments[1];
         settings[@"callbackId"]       = command.callbackId;
 
-        [self printContent:content withSettings:settings];
+        if ([content hasPrefix:@"http://"] || [content hasPrefix:@"https://"]) {
+            [self printWebView:content withSettings:settings];
+        } else {
+            [self printContent:content withSettings:settings];
+        }
     }];
 }
 
@@ -121,7 +125,7 @@
     APPPrinterPaper* paperSpec = [[APPPrinterPaper alloc]
                                   initWithDictionary:ctrl.settings[@"paper"]];
 
-    return (paperSpec.length)?paperSpec.length:paper.paperSize.height;
+    return paperSpec.length || paper.paperSize.height;
 }
 
 #pragma mark -
@@ -184,6 +188,9 @@
         dispatch_sync(dispatch_get_main_queue(), ^{
             item = self.webView.viewPrintFormatter;
         });
+    }
+    else if ([content isEqualToString:@"_"]) {
+        item = _printWebView.viewPrintFormatter;
     }
     else if ([content characterAtIndex:0] == '<')
     {
@@ -301,6 +308,32 @@
                 completionHandler:handler];
         }
     });
+}
+
+#pragma mark -
+#pragma mark WKWebView
+
+WKWebView* _printWebView;
+NSDictionary* _printSettings;
+
+- (void)printWebView:(NSString *) url withSettings: (NSDictionary *) settings
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!_printWebView) {
+            _printWebView = [[WKWebView alloc] initWithFrame:self.webView.frame];
+            _printWebView.navigationDelegate = self;
+        }
+        
+        _printSettings = settings;
+        NSURL* _url = [NSURL URLWithString: url];
+        NSURLRequest* request = [NSURLRequest requestWithURL: _url];
+        [_printWebView loadRequest:request];
+    });
+}
+
+- (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation
+{
+    [self printContent:@"_" withSettings:_printSettings];
 }
 
 #pragma mark -
