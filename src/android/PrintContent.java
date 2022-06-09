@@ -24,8 +24,8 @@ package de.appplant.cordova.plugin.printer;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -116,6 +116,8 @@ class PrintContent
                     return ContentType.IMAGE;
                 case "application/pdf":
                     return ContentType.PDF;
+                case "text/html":
+                    return ContentType.HTML;
                 default:
                     return ContentType.UNSUPPORTED;
             }
