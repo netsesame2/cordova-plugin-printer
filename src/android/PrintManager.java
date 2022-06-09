@@ -27,9 +27,9 @@ import android.graphics.Bitmap;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintJob;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.print.PrintHelper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.print.PrintHelper;
 import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -194,8 +194,11 @@ class PrintManager
                     PrintManager.this.view = null;
                 }
             });
-
-            view.loadDataWithBaseURL("file:///android_asset/www/", content, mimeType, "UTF-8",null);
+                if (content.matches("^[a-z0-9]+://.+")) {
+                    view.loadUrl(content);
+                } else {
+                    view.loadDataWithBaseURL("file:///android_asset/www/", content, mimeType, "UTF-8", null);
+                }
         });
     }
 
